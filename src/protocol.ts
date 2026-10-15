@@ -43,6 +43,34 @@ export const normalizeTx = (x: unknown) => {
     return (x as { txId: string }).txId;
   throw Error("Wallet returned an invalid transaction hash.");
 };
+export const parseSafeGEN = (text: string) => {
+  if (!/^(0|[1-9]\d{0,3})(\.\d{1,18})?$/.test(text))
+    throw Error("Enter a positive GEN amount with up to 18 decimals.");
+  const [whole, fraction = ""] = text.split(".");
+  const wei = BigInt(whole) * 10n ** 18n + BigInt(fraction.padEnd(18, "0"));
+  if (wei <= 0n || wei > BigInt(Number.MAX_SAFE_INTEGER))
+    throw Error("Amount exceeds the exact integer range supported by this form.");
+  return Number(wei);
+};
+export function execution(tx: unknown): unknown {
+  const value = tx as {
+    status?: string | number;
+    consensus_data?: {
+      leader_receipt?: Array<{ mode?: string; execution_result?: string; result?: { status?: string; payload?: { readable?: string } | string } }>;
+      votes?: Record<string, string>;
+    };
+  };
+  if (value.status !== "FINALIZED" && value.status !== 7) throw Error("Transaction has not finalized.");
+  const receipts = value.consensus_data?.leader_receipt || [];
+  const receipt = [...receipts].reverse().find((x) => x.mode !== "validator") || receipts.at(-1);
+  const payload = receipt?.result?.payload;
+  const readable = payload && typeof payload === "object" ? payload.readable : undefined;
+  if (!receipt || receipt.execution_result !== "SUCCESS" || receipt.result?.status !== "return" || readable === undefined)
+    throw Error(typeof payload === "string" ? payload : "GenVM execution did not succeed.");
+  if (Object.values(value.consensus_data?.votes || {}).filter((x) => x === "agree").length < 3)
+    throw Error("Validator consensus was not established.");
+  return JSON.parse(readable);
+}
 export const gen = (n: number) => `${(Number(n) / 1e18).toFixed(4)} GEN`;
 export const phases = [
   "DRAFT",

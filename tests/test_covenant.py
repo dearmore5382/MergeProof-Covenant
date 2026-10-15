@@ -25,9 +25,14 @@ def verified(e,outcome='SATISFIED',snap=None):
  cid=funded(e);call(e,e[3],'submit_merge',cid,7);mod=e[1]._instance.create_covenant.__globals__
  with patch.dict(mod,{'_github_snapshot':lambda *_:snap or snapshot(),'_assess':lambda *_:{'outcome':outcome,'matched':[0,1]if outcome=='SATISFIED'else([0]if outcome=='PARTIAL'else[])}}):assert call(e,e[4],'verify_merge',cid)==outcome
  return cid
-def test_runner_and_no_deployer_privilege():assert FILE.read_text().splitlines()[:2]==['# v0.2.16','# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }']
+def test_runner_and_no_deployer_privilege():
+ source=FILE.read_text();assert source.splitlines()[:2]==['# v0.2.16','# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }']
+ assert 'gl.eq_principle.strict_eq' not in source and source.count('gl.vm.run_nondet(')>=2 and 'CHALLENGE_ALREADY_USED' in source
 def test_create_binds_sender_and_immutable_terms(env):
  cid=call(env,env[2],'create_covenant',json.dumps(terms(env)));v=env[1].get_covenant(cid);assert v['sponsor']==eth(env[2])and v['phase']=='DRAFT'and len(v['terms_digest'])==64
+ for mutation in ({'contributor':'0x0'},{'repo':'bad/repo/extra'},{'production_prefix':'README.md'},{'test_prefix':'src/'}):
+  bad=terms(env);bad.update(mutation)
+  with pytest.raises(Exception):call(env,env[2],'create_covenant',json.dumps(bad))
 def test_exact_funding_and_role_rollback(env):
  cid=call(env,env[2],'create_covenant',json.dumps(terms(env)));before=env[1].get_covenant(cid)
  for actor,amount in((env[4],1000),(env[2],999),(env[2],1001)):
@@ -50,9 +55,25 @@ def test_source_unavailable_never_grants_credit(env):
  cid=funded(env);call(env,env[3],'submit_merge',cid,7);mod=env[1]._instance.create_covenant.__globals__
  with patch.dict(mod,{'_github_snapshot':lambda *_:(_ for _ in()).throw(ValueError('down'))}):assert call(env,env[4],'verify_merge',cid)=='SOURCE_UNAVAILABLE'
  assert env[1].get_covenant(cid)['credits']=={}
+def test_verified_storage_keeps_digests_not_unbounded_source(env):
+ cid=verified(env);artifacts=env[1].get_covenant(cid)['verdict']['snapshot']['artifacts'];assert artifacts and all(set(x)=={'path','sha256'} for x in artifacts)
+def test_github_file_pagination_fails_closed_when_truncated(env):
+ mod=env[1]._instance.create_covenant.__globals__
+ def fake(url):
+  if '/pulls/7/files?' in url:return [{'filename':f'src/f{i}.ts'} for i in range(100)]
+  if '/pulls/7' in url:return {'merged':True,'state':'closed','base':{'ref':'main'},'merge_commit_sha':'a'*40,'head':{'sha':'b'*40}}
+  if '/commits/' in url:return {'sha':'a'*40}
+  raise AssertionError(url)
+ with patch.dict(mod,{'_read_json':fake}):
+  with pytest.raises(ValueError,match='FILES_TRUNCATED'):mod['_github_snapshot']('acme/protocol',7,'main','src/','tests/')
 def test_challenge_is_single_bounded_recheck(env):
  cid=verified(env);assert call(env,env[4],'challenge',cid,'c'*64)=='CHALLENGED';state=env[1].get_covenant(cid)
  with pytest.raises(Exception):call(env,env[4],'challenge',cid,'d'*64)
+ assert env[1].get_covenant(cid)==state
+ mod=env[1]._instance.create_covenant.__globals__
+ with patch.dict(mod,{'_github_snapshot':lambda *_:snapshot(),'_assess':lambda *_:{'outcome':'SATISFIED','matched':[0,1]}}):assert call(env,env[4],'resolve_challenge',cid)=='SATISFIED'
+ state=env[1].get_covenant(cid)
+ with pytest.raises(Exception):call(env,env[4],'challenge',cid,'e'*64)
  assert env[1].get_covenant(cid)==state
 def test_finalize_deterministic_full_partial_and_refund(env):
  for outcome,award in(('SATISFIED',1000),('PARTIAL',500),('INSUFFICIENT',0)):
@@ -62,6 +83,17 @@ def test_finalize_before_challenge_end_no_mutation(env):
  cid=verified(env);before=env[1].get_covenant(cid)
  with pytest.raises(Exception):call(env,env[4],'finalize',cid)
  assert env[1].get_covenant(cid)==before
+def test_verification_and_finalization_close_at_deadlines(env):
+ cid=funded(env);call(env,env[3],'submit_merge',cid,7);before=env[1].get_covenant(cid);env[0].warp('2026-10-15T00:20:00Z')
+ with pytest.raises(Exception):call(env,env[4],'verify_merge',cid)
+ assert env[1].get_covenant(cid)==before
+ env[0].warp('2026-10-15T00:00:00Z');cid=verified(env,snap=snapshot('e'*40));env[0].warp('2026-10-15T00:30:00Z');before=env[1].get_covenant(cid)
+ with pytest.raises(Exception):call(env,env[4],'finalize',cid)
+ assert env[1].get_covenant(cid)==before
+def test_same_merge_cannot_settle_twice_after_parallel_verification(env):
+ first=verified(env,snap=snapshot('f'*40));second=verified(env,snap=snapshot('f'*40));env[0].warp('2026-10-15T00:20:00Z');assert call(env,env[4],'finalize',first)=='SATISFIED';before=env[1].get_covenant(second)
+ with pytest.raises(Exception):call(env,env[4],'finalize',second)
+ assert env[1].get_covenant(second)==before
 def test_permissionless_expiry_recovery_refunds_sponsor(env):
  cid=funded(env);env[0].warp('2026-10-15T00:30:00Z');assert call(env,env[4],'recover_expired',cid)=='REFUND_AVAILABLE';v=env[1].get_covenant(cid);assert v['credits']=={eth(env[2]):{'amount':1000,'kind':'REFUND','status':'AVAILABLE'}}
 def test_native_payout_is_pending_not_falsely_paid(env):
