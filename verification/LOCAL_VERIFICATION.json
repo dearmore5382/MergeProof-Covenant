@@ -1,12 +1,12 @@
 {
-  "date": "2026-10-15T08:12:45.080Z",
+  "date": "2026-10-15T08:27:20.097Z",
   "node": "v26.2.0",
   "source_sha256": "635a000eec1aafc8246c8bd88983400185bc7036109d4ba524598ff26e2f2e49",
   "steps": [
     {
       "command": "python.exe -m pytest tests -q",
       "exit_code": 0,
-      "stdout": "...........                                                              [100%]\r\n11 passed in 1.05s\r\n",
+      "stdout": "...........                                                              [100%]\r\n11 passed in 0.96s\r\n",
       "stderr": "WARNING: File `gltest.config.yaml` not found in the current directory, using default config, create a `gltest.config.yaml` file to manage multiple networks\r\nINFO: Clearing artifacts directory: artifacts\r\nINFO: Using the following configuration:\r\nINFO:   RPC URL: http://127.0.0.1:4000/api\r\nINFO:   Selected Network: localnet\r\nINFO:   Available networks: ['localnet', 'studionet', 'testnet_asimov', 'testnet_bradbury']\r\nINFO:   Selected chain type: localnet\r\nINFO:   Available chains: localnet, studionet, testnet_asimov, testnet_bradbury\r\nINFO:   Contracts directory: contracts\r\nINFO:   Artifacts directory: artifacts\r\nINFO:   Environment: .env\r\nINFO:   Default wait interval: 3000 ms\r\nINFO:   Default wait retries: 50\r\nINFO:   Leader only mode: False\r\n"
     },
     {
@@ -18,13 +18,13 @@
     {
       "command": "cmd.exe /d /s /c npm test",
       "exit_code": 0,
-      "stdout": "\n> mergeproof-covenant@0.1.0 test\n> vitest run\n\n\n RUN  v4.1.11 G:/Genlayer 3/MergeProofCovenant\n\n\n Test Files  1 passed (1)\n      Tests  3 passed (3)\n   Start at  15:12:51\n   Duration  349ms (transform 60ms, setup 0ms, import 87ms, tests 7ms, environment 0ms)\n\n",
+      "stdout": "\n> mergeproof-covenant@0.1.0 test\n> vitest run\n\n\n RUN  v4.1.11 G:/Genlayer 3/MergeProofCovenant\n\n\n Test Files  1 passed (1)\n      Tests  3 passed (3)\n   Start at  15:27:26\n   Duration  365ms (transform 64ms, setup 0ms, import 93ms, tests 6ms, environment 0ms)\n\n",
       "stderr": ""
     },
     {
       "command": "cmd.exe /d /s /c npm run build",
       "exit_code": 0,
-      "stdout": "\n> mergeproof-covenant@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v6.4.4 building for production...\ntransforming...\n✓ 482 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                     0.45 kB │ gzip:   0.31 kB\ndist/assets/logo-DjW1ygVo.png   1,432.36 kB\ndist/assets/index-3jCpRsMB.css      5.39 kB │ gzip:   1.93 kB\ndist/assets/ccip-CBwRKFfi.js        3.04 kB │ gzip:   1.39 kB\ndist/assets/index-C4ISs5Ir.js     740.16 kB │ gzip: 180.75 kB\n✓ built in 4.41s\n",
+      "stdout": "\n> mergeproof-covenant@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v6.4.4 building for production...\ntransforming...\n✓ 482 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                     0.45 kB │ gzip:   0.31 kB\ndist/assets/logo-DjW1ygVo.png   1,432.36 kB\ndist/assets/index-3jCpRsMB.css      5.39 kB │ gzip:   1.93 kB\ndist/assets/ccip-FRqGNx7b.js        3.04 kB │ gzip:   1.39 kB\ndist/assets/index-5LUuqOHb.js     740.20 kB │ gzip: 180.79 kB\n✓ built in 4.22s\n",
       "stderr": ""
     }
   ]

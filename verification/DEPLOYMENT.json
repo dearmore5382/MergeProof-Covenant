@@ -1,15 +1,16 @@
 {
   "network": "studionet",
-  "status": "superseded_requires_redeployment",
-  "superseded_reason": "Deployment verifies GitHub object identity and changed paths but predates commit-pinned production/test blob acquisition required by the current source.",
-  "address": "0x7c5e173E75CC5464b7a9ED5129a40637268071FB",
-  "verified_at": "2026-10-15T07:58:24.935826Z",
+  "status": "active_source_parity_verified",
+  "address": "0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
+  "verified_at": "2026-10-15T08:26:52.762605Z",
   "source_parity": true,
-  "source_sha256": "7bcc1b618be679644328bc3b76c3e86f5bc60fc13bda64c23e7e5f50d7343397",
-  "deployed_bytes": 13641,
+  "source_sha256": "635a000eec1aafc8246c8bd88983400185bc7036109d4ba524598ff26e2f2e49",
+  "deployed_sha256": "635a000eec1aafc8246c8bd88983400185bc7036109d4ba524598ff26e2f2e49",
+  "deployed_bytes": 14426,
   "config": {
     "schema": "mergeproof-covenant-v1",
     "count": 0
   },
-  "explorer": "https://explorer-studio.genlayer.com/address/0x7c5e173E75CC5464b7a9ED5129a40637268071FB"
+  "explorer": "https://explorer-studio.genlayer.com/address/0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
+  "supersedes": "0x7c5e173E75CC5464b7a9ED5129a40637268071FB"
 }
