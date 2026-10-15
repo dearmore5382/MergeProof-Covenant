@@ -85,7 +85,11 @@ def _verify(repo, pr_number, base_branch, production_prefix, test_prefix, criter
             return {"snapshot": snap, "result": _assess(snap, criteria)}
         except Exception:
             return {"snapshot": None, "result": {"outcome":"SOURCE_UNAVAILABLE","matched":[]}}
-    return gl.vm.run_nondet(observe, gl.eq_principle.strict_eq)
+    def validator(proposal):
+        if not isinstance(proposal, gl.vm.Return):
+            return False
+        return proposal.calldata == observe()
+    return gl.vm.run_nondet(observe, validator)
 
 @gl.evm.contract_interface
 class _Recipient:
@@ -115,7 +119,11 @@ def _confirm_transfer(contract,cid,recipient,amount,parent_hash,child_hash):
     def observe():
         try: return _transfer_proof(contract,cid,recipient,amount,parent_hash,child_hash)
         except Exception: return False
-    return gl.eq_principle.strict_eq(observe)
+    def validator(proposal):
+        if not isinstance(proposal, gl.vm.Return):
+            return False
+        return proposal.calldata == observe()
+    return gl.vm.run_nondet(observe, validator)
 
 class MergeProofCovenant(gl.Contract):
     covenants: TreeMap[u256, str]
@@ -184,6 +192,7 @@ class MergeProofCovenant(gl.Contract):
     def challenge(self, cid: int, reason_digest: str):
         v=self._get(cid)
         if v["phase"]!="VERIFIED" or self._now()>=v["terms"]["challenge_end"]: raise gl.vm.UserError("CHALLENGE_CLOSED")
+        if v["challenge"] is not None: raise gl.vm.UserError("CHALLENGE_ALREADY_USED")
         if len(reason_digest)!=64: raise gl.vm.UserError("INVALID_REASON_DIGEST")
         v["challenge"]={"challenger":self._sender(),"reason_digest":reason_digest}; v["phase"]="CHALLENGED"; self._put(cid,v); return "CHALLENGED"
 

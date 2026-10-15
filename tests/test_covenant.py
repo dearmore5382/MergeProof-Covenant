@@ -25,7 +25,9 @@ def verified(e,outcome='SATISFIED',snap=None):
  cid=funded(e);call(e,e[3],'submit_merge',cid,7);mod=e[1]._instance.create_covenant.__globals__
  with patch.dict(mod,{'_github_snapshot':lambda *_:snap or snapshot(),'_assess':lambda *_:{'outcome':outcome,'matched':[0,1]if outcome=='SATISFIED'else([0]if outcome=='PARTIAL'else[])}}):assert call(e,e[4],'verify_merge',cid)==outcome
  return cid
-def test_runner_and_no_deployer_privilege():assert FILE.read_text().splitlines()[:2]==['# v0.2.16','# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }']
+def test_runner_and_no_deployer_privilege():
+ source=FILE.read_text();assert source.splitlines()[:2]==['# v0.2.16','# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }']
+ assert 'gl.eq_principle.strict_eq' not in source and source.count('gl.vm.run_nondet(')>=2 and 'CHALLENGE_ALREADY_USED' in source
 def test_create_binds_sender_and_immutable_terms(env):
  cid=call(env,env[2],'create_covenant',json.dumps(terms(env)));v=env[1].get_covenant(cid);assert v['sponsor']==eth(env[2])and v['phase']=='DRAFT'and len(v['terms_digest'])==64
 def test_exact_funding_and_role_rollback(env):
@@ -53,6 +55,11 @@ def test_source_unavailable_never_grants_credit(env):
 def test_challenge_is_single_bounded_recheck(env):
  cid=verified(env);assert call(env,env[4],'challenge',cid,'c'*64)=='CHALLENGED';state=env[1].get_covenant(cid)
  with pytest.raises(Exception):call(env,env[4],'challenge',cid,'d'*64)
+ assert env[1].get_covenant(cid)==state
+ mod=env[1]._instance.create_covenant.__globals__
+ with patch.dict(mod,{'_github_snapshot':lambda *_:snapshot(),'_assess':lambda *_:{'outcome':'SATISFIED','matched':[0,1]}}):assert call(env,env[4],'resolve_challenge',cid)=='SATISFIED'
+ state=env[1].get_covenant(cid)
+ with pytest.raises(Exception):call(env,env[4],'challenge',cid,'e'*64)
  assert env[1].get_covenant(cid)==state
 def test_finalize_deterministic_full_partial_and_refund(env):
  for outcome,award in(('SATISFIED',1000),('PARTIAL',500),('INSUFFICIENT',0)):
