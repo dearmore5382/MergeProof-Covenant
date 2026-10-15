@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+artifacts/
+.pytest_cache/
+__pycache__/
+*.pyc
+.wrangler/

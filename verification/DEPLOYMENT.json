@@ -1,0 +1,13 @@
+{
+  "network": "studionet",
+  "address": "0x7c5e173E75CC5464b7a9ED5129a40637268071FB",
+  "verified_at": "2026-10-15T07:58:24.935826Z",
+  "source_parity": true,
+  "source_sha256": "7bcc1b618be679644328bc3b76c3e86f5bc60fc13bda64c23e7e5f50d7343397",
+  "deployed_bytes": 13641,
+  "config": {
+    "schema": "mergeproof-covenant-v1",
+    "count": 0
+  },
+  "explorer": "https://explorer-studio.genlayer.com/address/0x7c5e173E75CC5464b7a9ED5129a40637268071FB"
+}
