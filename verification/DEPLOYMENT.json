@@ -1,20 +1,22 @@
 {
   "network": "studionet",
-  "status": "superseded_live_validator_serialization_failure",
-  "address": "0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
-  "verified_at": "2026-10-15T08:26:52.762605Z",
+  "status": "superseded_live_receipt_schema_failure",
+  "address": "0xa816CAe7E4c20ac44DE2d332b87775965076e533",
+  "verified_at": "2026-10-15T09:38:00Z",
   "source_parity": true,
-  "source_sha256": "635a000eec1aafc8246c8bd88983400185bc7036109d4ba524598ff26e2f2e49",
-  "deployed_sha256": "635a000eec1aafc8246c8bd88983400185bc7036109d4ba524598ff26e2f2e49",
-  "deployed_bytes": 14426,
+  "source_sha256": "0d95aa1f665863fed9e82e805e1cb2e231ac2a02893cd6d5d26c117ea7c183f5",
+  "deployed_sha256": "0d95aa1f665863fed9e82e805e1cb2e231ac2a02893cd6d5d26c117ea7c183f5",
   "config": {
     "schema": "mergeproof-covenant-v1",
-    "count": 0
+    "count": 1
   },
-  "explorer": "https://explorer-studio.genlayer.com/address/0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
-  "supersedes": "0x7c5e173E75CC5464b7a9ED5129a40637268071FB",
+  "explorer": "https://explorer-studio.genlayer.com/address/0xa816CAe7E4c20ac44DE2d332b87775965076e533",
+  "supersedes": "0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
   "passing_e2e": false,
-  "failure_tx": "0x4547bc36d0f1210f88f5f6b2ee16eb5adccc03ee87019064117004a116dd1d47",
-  "failure_effect": "verify_merge rejected; covenant remained PROOF_SUBMITTED",
+  "payout_parent_tx": "0x1153ef1ee0d77b2021d2fa6d7f75ef5538f27885a6944191757344134422c6a8",
+  "payout_child_tx": "0x42621e5a362130311a5e08cc61f804ca1d340d934009f0c64792466eba63f7ce",
+  "failure_tx": "0x926f1efb576fe4f9b9e1c95bf484a0be2414aa723f5118cd3784d7348d89c486",
+  "failure_effect": "native payout credited, but confirm_payout rejected numeric finalized status; authoritative credit remained TRANSFER_PENDING",
+  "diagnostic_report": "verification/E2E_STUDIONET_5076e533.json",
   "replacement": "pending"
 }

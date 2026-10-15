@@ -40,6 +40,10 @@ function execution(tx) {
 async function tx(actor, label, functionName, args = [], value = 0n, expected, reject = false, cid = report.covenant_id) {
   let row = report.transactions.find(x => x.label === label);
   if (row?.verified) return row.result;
+  if (row?.hash && row?.receipt && !row.verified) {
+    row.label = `${label} (failed consensus attempt ${report.transactions.filter(x => x.label.startsWith(label)).length})`;
+    row = undefined;
+  }
   if (!row) {
     row = { label, actor: accounts[actor].address, function: functionName, args, value: String(value), before: cid === undefined ? await read("get_config") : await read("get_covenant", [cid]) };
     report.transactions.push(row); save();

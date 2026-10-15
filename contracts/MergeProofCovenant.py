@@ -1,6 +1,7 @@
 # v0.2.16
 # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
 from genlayer import *
+from genlayer.py import calldata
 import json, hashlib, base64
 from datetime import datetime
 import typing
@@ -121,12 +122,14 @@ def _rpc_transaction(tx_hash):
 def _transfer_proof(contract,cid,recipient,amount,parent_hash,child_hash):
     parent,child=_rpc_transaction(parent_hash),_rpc_transaction(child_hash);low=lambda x:str(x).lower()
     if low(parent.get("hash"))!=parent_hash or low(child.get("hash"))!=child_hash: raise ValueError("HASH_BINDING")
-    if parent.get("status")!="FINALIZED" or child.get("status")!="FINALIZED": raise ValueError("NOT_FINAL")
+    final=lambda x:x.get("status") in (7,"FINALIZED") or x.get("statusName")=="FINALIZED"
+    if not final(parent) or not final(child): raise ValueError("NOT_FINAL")
     if low(parent.get("to_address"))!=contract or low(parent.get("from_address"))!=recipient: raise ValueError("PARENT_IDENTITY")
     args=calldata.decode(base64.b64decode(parent["data"]["calldata"]))
     if args.get("method")!="request_payout" or list(args.get("args",[]))!=[cid]: raise ValueError("PARENT_ACTION")
     if child_hash not in [low(x) for x in parent.get("triggered_transactions",[])] or low(child.get("triggered_by"))!=parent_hash: raise ValueError("CHILD_BINDING")
-    if low(child.get("from_address"))!=contract or low(child.get("to_address"))!=recipient or int(child.get("value",-1))!=amount or int(child.get("type",-1))!=0: raise ValueError("TRANSFER_BINDING")
+    if low(child.get("from_address"))!=contract or low(child.get("to_address"))!=recipient or int(child.get("value",-1))!=amount: raise ValueError("TRANSFER_BINDING")
+    if "type" in child and int(child["type"])!=0: raise ValueError("TRANSFER_TYPE")
     if child.get("value_credited") is not True: raise ValueError("TRANSFER_NOT_CREDITED")
     return True
 
