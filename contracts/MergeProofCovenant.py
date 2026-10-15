@@ -25,6 +25,14 @@ def _read_json(url):
         raise ValueError("SOURCE_UNAVAILABLE")
     return json.loads(response.body.decode())
 
+def _read_blob(repo, revision, path):
+    if not path or ".." in path or path.startswith("/"): raise ValueError("INVALID_PATH")
+    url="https://raw.githubusercontent.com/"+repo+"/"+revision+"/"+path.replace(" ","%20")
+    response=gl.nondet.web.get(url,headers={"Accept":"text/plain"})
+    if int(response.status)!=200 or response.body is None or len(response.body)>120000: raise ValueError("BLOB_UNAVAILABLE")
+    raw=bytes(response.body)
+    return {"path":path,"sha256":_digest(raw),"content":raw.decode("utf-8")}
+
 def _github_snapshot(repo, pr_number, base_branch, production_prefix, test_prefix):
     root = "https://api.github.com/repos/" + repo
     pr = _read_json(root + "/pulls/" + str(pr_number))
@@ -50,15 +58,18 @@ def _github_snapshot(repo, pr_number, base_branch, production_prefix, test_prefi
     changed = sorted({str(x.get("filename", "")) for x in files if x.get("filename")})
     production = [x for x in changed if x.startswith(production_prefix)]
     tests = [x for x in changed if x.startswith(test_prefix)]
+    selected=production+tests
+    if not production or not tests or len(selected)>12: raise ValueError("REQUIRED_ARTIFACTS_MISSING_OR_UNBOUNDED")
+    artifacts=[_read_blob(repo,merge_sha,path) for path in selected]
     return {"repo": repo, "pr": pr_number, "base": base_branch, "merge_sha": merge_sha,
             "head_sha": str(pr.get("head", {}).get("sha", "")).lower(),
-            "production": production, "tests": tests, "changed": changed}
+            "production": production, "tests": tests, "changed": changed,"artifacts":artifacts}
 
 def _assess(snapshot, criteria):
     if not snapshot["production"] or not snapshot["tests"]:
         return {"outcome": "INSUFFICIENT", "matched": []}
-    prompt = "MERGEPROOF_V1\nReturn only compact JSON {outcome:SATISFIED|PARTIAL|INSUFFICIENT,matched:[criterion_index]}. " \
-             "Judge the actual changed implementation/test paths against every sealed criterion. Documentation alone is insufficient.\n" + _canon({"snapshot": snapshot, "criteria": criteria})
+    prompt = "MERGEPROOF_V2\nReturn only compact JSON {outcome:SATISFIED|PARTIAL|INSUFFICIENT,matched:[criterion_index]}. " \
+             "Judge the commit-pinned implementation and regression-test bytes against every sealed criterion. Documentation and filenames alone are insufficient.\n" + _canon({"snapshot": snapshot, "criteria": criteria})
     x = json.loads(gl.nondet.exec_prompt(prompt))
     if set(x) != {"outcome", "matched"} or x["outcome"] not in OUTCOMES[:3]: raise ValueError("INVALID_VERDICT")
     if not isinstance(x["matched"], list) or any(type(i) is not int or i < 0 or i >= len(criteria) for i in x["matched"]): raise ValueError("INVALID_MATCHES")

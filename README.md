@@ -24,7 +24,7 @@ funded nonterminal state after expiry → RECOVERED → sponsor refund
 
 ## GitHub authority
 
-The contract calls GitHub's API for the exact repository and PR, verifies merge state, base branch, full merge SHA, commit identity and changed paths. Validators evaluate actual path facts, not claimant prose. Source unavailability fails closed. See [source manifest](docs/TEST_RESOURCE_MANIFEST.md) and [threat model](docs/THREAT_MODEL.md).
+The contract calls GitHub's API for the exact repository and PR, verifies merge state, base branch, full merge SHA and commit identity, then fetches every required production/test blob at that immutable SHA and recomputes its digest. Validators evaluate the actual bytes, not claimant prose or filenames. Source unavailability fails closed. See [source manifest](docs/TEST_RESOURCE_MANIFEST.md) and [threat model](docs/THREAT_MODEL.md).
 
 ## Local verification
 
@@ -38,7 +38,7 @@ The gate runs Direct Mode against the submitted public contract methods, GenVM l
 
 ## Deploy and live test
 
-StudioNet deployment: `0x7c5e173E75CC5464b7a9ED5129a40637268071FB`. It was deployed from `contracts/MergeProofCovenant.py` with no constructor arguments using the main wallet. Do not use the deployer for lifecycle proof. Configure two auxiliary wallets:
+The earlier deployment `0x7c5e173E75CC5464b7a9ED5129a40637268071FB` is retained only as superseded provenance: it predates commit-pinned blob acquisition and must not be submitted or used for E2E. Deploy the current `contracts/MergeProofCovenant.py` with no constructor arguments using the main wallet. Do not use the deployer for lifecycle proof. Configure two auxiliary wallets:
 
 - Wallet A: create/fund as sponsor.
 - Wallet B: contributor submit plus independent challenge/recovery calls.

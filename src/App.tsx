@@ -21,7 +21,7 @@ declare global {
 }
 const reader = createClient({ chain: studionet });
 const explorer = "https://explorer-studio.genlayer.com";
-const deployedAddress = "0x7c5e173E75CC5464b7a9ED5129a40637268071FB";
+const deployedAddress = "";
 const short = (x: string) =>
   x ? `${x.slice(0, 6)}…${x.slice(-4)}` : "Not connected";
 export default function App() {

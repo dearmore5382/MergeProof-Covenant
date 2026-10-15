@@ -1,5 +1,7 @@
 {
   "network": "studionet",
+  "status": "superseded_requires_redeployment",
+  "superseded_reason": "Deployment verifies GitHub object identity and changed paths but predates commit-pinned production/test blob acquisition required by the current source.",
   "address": "0x7c5e173E75CC5464b7a9ED5129a40637268071FB",
   "verified_at": "2026-10-15T07:58:24.935826Z",
   "source_parity": true,
