@@ -103,6 +103,7 @@ try {
   const cid = report.covenant_id;
   await tx(1, "wrong wallet funding", "fund", [cid], budget, null, true, cid);
   await tx(0, "underfund by one wei", "fund", [cid], budget - 1n, null, true, cid);
+  await tx(0, "overfund by one wei", "fund", [cid], budget + 1n, null, true, cid);
   await tx(0, "fund exact budget", "fund", [cid], budget, "FUNDED", false, cid);
   await tx(0, "wrong submitter", "submit_merge", [cid, pr], 0n, null, true, cid);
   await tx(1, "submit merged PR", "submit_merge", [cid, pr], 0n, "PROOF_SUBMITTED", false, cid);

@@ -38,9 +38,11 @@ The gate runs Direct Mode against the submitted public contract methods, GenVM l
 
 ## Deploy and live test
 
-Active StudioNet deployment: `0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622`. Its deployed source matches `contracts/MergeProofCovenant.py` byte-for-byte at SHA-256 `635a000eec1aafc8246c8bd88983400185bc7036109d4ba524598ff26e2f2e49`. It was deployed with no constructor arguments using the main wallet. Do not use the deployer for lifecycle proof. Configure two auxiliary wallets:
+Replacement deployment is pending after a live StudioNet validator-serialization remediation. The prior address `0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622` is **SUPERSEDED**: its live `verify_merge` transaction safely failed without state mutation because the generic `strict_eq` validator could not be serialized by GenVM. The exact failure receipt is retained in `verification/LIVE_DIAGNOSTIC_OLD_CONTRACT.json`; it is not presented as passing E2E evidence.
 
-The earlier deployment `0x7c5e173E75CC5464b7a9ED5129a40637268071FB` is superseded and must not be submitted or used for E2E because it predates commit-pinned blob acquisition.
+Deploy the current `contracts/MergeProofCovenant.py` with no constructor arguments using the main wallet, then configure two auxiliary wallets for lifecycle proof. Do not use the deployer for lifecycle proof.
+
+The earlier deployments `0x7c5e173E75CC5464b7a9ED5129a40637268071FB` and `0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622` are superseded and must not be submitted or used as passing E2E evidence.
 
 - Wallet A: create/fund as sponsor.
 - Wallet B: contributor submit plus independent challenge/recovery calls.

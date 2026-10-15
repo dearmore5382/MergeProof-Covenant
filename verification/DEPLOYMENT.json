@@ -1,6 +1,6 @@
 {
   "network": "studionet",
-  "status": "active_source_parity_verified",
+  "status": "superseded_live_validator_serialization_failure",
   "address": "0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
   "verified_at": "2026-10-15T08:26:52.762605Z",
   "source_parity": true,
@@ -12,5 +12,9 @@
     "count": 0
   },
   "explorer": "https://explorer-studio.genlayer.com/address/0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
-  "supersedes": "0x7c5e173E75CC5464b7a9ED5129a40637268071FB"
+  "supersedes": "0x7c5e173E75CC5464b7a9ED5129a40637268071FB",
+  "passing_e2e": false,
+  "failure_tx": "0x4547bc36d0f1210f88f5f6b2ee16eb5adccc03ee87019064117004a116dd1d47",
+  "failure_effect": "verify_merge rejected; covenant remained PROOF_SUBMITTED",
+  "replacement": "pending"
 }

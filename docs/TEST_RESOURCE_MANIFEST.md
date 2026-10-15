@@ -13,7 +13,7 @@ GET https://api.github.com/repos/{owner}/{repo}/pulls/{pr}/files?per_page=100&pa
 GET https://raw.githubusercontent.com/{owner}/{repo}/{merge_sha}/{required_path}
 ```
 
-Observed fields are PR `merged/state`, base ref, head SHA, merge SHA, canonical commit SHA and changed filenames. For every required production/test path, validators fetch the exact blob at the full merge SHA, recompute SHA-256 and provide the bytes to semantic adjudication. The implementation caps file pagination at 300 entries, required artifacts at 12 and each blob at 120 KB; it fails closed for unavailable, oversized or malformed responses.
+Observed fields are PR `merged/state`, base ref, head SHA, merge SHA, canonical commit SHA and changed filenames. For every required production/test path, validators fetch the exact blob at the full merge SHA, recompute SHA-256 and provide the bytes to semantic adjudication. The implementation caps complete file pagination at 300 entries, rejects a full third page as truncated rather than silently treating it as complete, caps required artifacts at 12 and each blob at 120 KB, and fails closed for unavailable, oversized or malformed responses.
 
 ## Controlled local source
 

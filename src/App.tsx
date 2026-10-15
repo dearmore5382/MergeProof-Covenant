@@ -6,8 +6,10 @@ import type { CalldataEncodable, Hash } from "genlayer-js/types";
 import logo from "../logo.png";
 import {
   gen,
+  execution,
   nextAction,
   normalizeTx,
+  parseSafeGEN,
   phases,
   validAddress,
   type Covenant,
@@ -21,7 +23,7 @@ declare global {
 }
 const reader = createClient({ chain: studionet });
 const explorer = "https://explorer-studio.genlayer.com";
-const deployedAddress = "0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622";
+const deployedAddress = import.meta.env.VITE_CONTRACT_ADDRESS || "";
 const short = (x: string) =>
   x ? `${x.slice(0, 6)}…${x.slice(-4)}` : "Not connected";
 export default function App() {
@@ -56,7 +58,7 @@ export default function App() {
     setWallet(a[0]?.toLowerCase() || "");
     setNotice("Wallet connected. Sync authoritative contract state.");
   };
-  const sync = async () => {
+  const sync = async (selectedId = id) => {
     if (!validAddress(address))
       throw Error("Enter a deployed StudioNet contract address.");
     const cfg = await reader.readContract({
@@ -69,7 +71,7 @@ export default function App() {
     const v = await reader.readContract({
       address: address as `0x${string}`,
       functionName: "get_covenant",
-      args: [id],
+      args: [selectedId],
     });
     setC(v as Covenant);
     localStorage.setItem("mergeproof-address", address);
@@ -97,7 +99,14 @@ export default function App() {
         value: value ?? 0n,
       });
       const hash = normalizeTx(raw) as Hash;
-      setNotice(`Submitted ${method}. Waiting for finalization…`);
+      setNotice(`Submitted ${method}. Waiting for acceptance… ${hash}`);
+      await reader.waitForTransactionReceipt({
+        hash,
+        status: TransactionStatus.ACCEPTED,
+        retries: 80,
+        interval: 3000,
+      });
+      setNotice(`Accepted ${method}. Waiting for finalization… ${hash}`);
       await reader.waitForTransactionReceipt({
         hash,
         status: TransactionStatus.FINALIZED,
@@ -105,25 +114,24 @@ export default function App() {
         interval: 3000,
       });
       const tx = await reader.getTransaction({ hash });
-      const ok =
-        (tx as any).statusName === "FINALIZED" &&
-        (tx as any).consensus_data?.leader_receipt?.execution_result ===
-          "SUCCESS";
-      if (!ok)
-        throw Error(`Transaction finalized unsuccessfully. Inspect ${hash}`);
-      await sync();
+      const result = execution(tx);
+      const selectedId = method === "create_covenant" ? Number(result) : id;
+      if (!Number.isInteger(selectedId) || selectedId < 0) throw Error("Invalid covenant ID returned by contract.");
+      if (method === "create_covenant") setId(selectedId);
+      await sync(selectedId);
       setNotice(
         `${method} finalized and authoritative state was re-read. ${hash}`,
       );
+      return { hash, result, tx };
     } finally {
       setBusy(false);
     }
   };
-  const safe = (fn: () => Promise<void>) =>
+  const safe = (fn: () => Promise<unknown>) =>
     fn().catch((e) => setError(e instanceof Error ? e.message : String(e)));
   const create = async () => {
     const now = Math.floor(Date.now() / 1000),
-      wei = Math.round(Number(budget) * 1e18);
+      wei = parseSafeGEN(budget);
     const terms = {
       title,
       contributor: contributor.toLowerCase(),
@@ -147,6 +155,7 @@ export default function App() {
     if (validAddress(address)) safe(sync);
   }, []);
   const phase = c?.phase || "NO COVENANT";
+  const now = Math.floor(Date.now() / 1000);
   return (
     <>
       <header>
@@ -330,7 +339,13 @@ export default function App() {
                       Challenge
                     </button>
                     <button
-                      disabled={busy || phase !== "VERIFIED"}
+                      disabled={busy || phase !== "CHALLENGED" || now >= c.terms.expires}
+                      onClick={() => safe(() => write("resolve_challenge", [id]))}
+                    >
+                      Recheck challenged proof
+                    </button>
+                    <button
+                      disabled={busy || phase !== "VERIFIED" || now < c.terms.challenge_end || now >= c.terms.expires}
                       onClick={() => safe(() => write("finalize", [id]))}
                     >
                       Finalize
@@ -343,7 +358,7 @@ export default function App() {
                           "PROOF_SUBMITTED",
                           "VERIFIED",
                           "CHALLENGED",
-                        ].includes(phase)
+                        ].includes(phase) || now < c.terms.expires
                       }
                       onClick={() => safe(() => write("recover_expired", [id]))}
                     >
