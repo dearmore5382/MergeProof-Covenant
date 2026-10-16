@@ -23,7 +23,7 @@ declare global {
 }
 const reader = createClient({ chain: studionet });
 const explorer = "https://explorer-studio.genlayer.com";
-const deployedAddress = import.meta.env.VITE_CONTRACT_ADDRESS || "";
+const deployedAddress = import.meta.env.VITE_CONTRACT_ADDRESS || "0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024";
 const short = (x: string) =>
   x ? `${x.slice(0, 6)}…${x.slice(-4)}` : "Not connected";
 export default function App() {

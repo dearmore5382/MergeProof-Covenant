@@ -99,3 +99,11 @@ def test_permissionless_expiry_recovery_refunds_sponsor(env):
 def test_native_payout_is_pending_not_falsely_paid(env):
  cid=verified(env);env[0].warp('2026-10-15T00:20:00Z');call(env,env[4],'finalize',cid);assert call(env,env[3],'request_payout',cid)=='TRANSFER_PENDING';v=env[1].get_covenant(cid);assert v['held']==0 and v['pending']==1000 and v['paid']==0 and v['credits'][eth(env[3])]['status']=='TRANSFER_PENDING'
  with pytest.raises(Exception):call(env,env[3],'request_payout',cid)
+def test_transfer_proof_accepts_canonical_studionet_receipt_shape(env):
+ mod=env[1]._instance.create_covenant.__globals__;parent='0x'+'1'*64;child='0x'+'2'*64;recipient=eth(env[3]);contract='0x'+'a'*40
+ encoded=mod['base64'].b64encode(mod['calldata'].encode({'method':'request_payout','args':[0]})).decode()
+ receipts={parent:{'hash':parent,'status':7,'statusName':'FINALIZED','to_address':contract,'from_address':recipient,'data':{'calldata':encoded},'triggered_transactions':[child]},child:{'hash':child,'status':7,'statusName':'FINALIZED','from_address':contract,'to_address':recipient,'value':'1000','triggered_by':parent,'value_credited':True}}
+ with patch.dict(mod,{'_rpc_transaction':lambda h:receipts[h]}):assert mod['_transfer_proof'](contract,0,recipient,1000,parent,child) is True
+ receipts[child]['to_address']=eth(env[4])
+ with patch.dict(mod,{'_rpc_transaction':lambda h:receipts[h]}):
+  with pytest.raises(ValueError,match='TRANSFER_BINDING'):mod['_transfer_proof'](contract,0,recipient,1000,parent,child)

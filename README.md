@@ -1,5 +1,7 @@
 # MergeProof Covenant
 
+Live application: https://mergeproof-covenant.pages.dev/
+
 MergeProof is a GenLayer escrow for a single software milestone. It pays only after validators independently obtain GitHub-controlled PR, commit and changed-file facts and determine that the exact merged implementation satisfies sealed acceptance criteria.
 
 It is not an auction and does not reuse AuditCover's bid, commit/reveal, coverage-matrix or bundle-selection architecture.
@@ -38,11 +40,15 @@ The gate runs Direct Mode against the submitted public contract methods, GenVM l
 
 ## Deploy and live test
 
-Replacement deployment is pending after a live StudioNet validator-serialization remediation. The prior address `0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622` is **SUPERSEDED**: its live `verify_merge` transaction safely failed without state mutation because the generic `strict_eq` validator could not be serialized by GenVM. The exact failure receipt is retained in `verification/LIVE_DIAGNOSTIC_OLD_CONTRACT.json`; it is not presented as passing E2E evidence.
+Active StudioNet deployment: `0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024`. Its deployed source matches `contracts/MergeProofCovenant.py` byte-for-byte at SHA-256 `8ab2124316902f950f6446fa9e6272aeae3fc1d55b3daba3f5e9a02019dad921`. A two-wallet live run completed 49 checks and 20 finalized transactions, including source-bound adjudication, challenge/recheck, exact native payout, receipt confirmation, replay rejection and value conservation. See `verification/E2E_STUDIONET_21dac024.md` and the complete receipt record in `verification/E2E_STUDIONET_21dac024.json`.
+
+Address `0xa816CAe7E4c20ac44DE2d332b87775965076e533` proved source parity and the lifecycle through native payout, but its confirmation rejected StudioNet's canonical numeric finalized status and optional transfer type. The payout transferred correctly while authoritative accounting remained `TRANSFER_PENDING`; the run is retained as diagnostic evidence and is not presented as passing E2E evidence.
+
+The prior address `0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622` is also **SUPERSEDED**: its live `verify_merge` transaction safely failed without state mutation because the generic `strict_eq` validator could not be serialized by GenVM. The exact failure receipt is retained in `verification/LIVE_DIAGNOSTIC_OLD_CONTRACT.json`.
 
 Deploy the current `contracts/MergeProofCovenant.py` with no constructor arguments using the main wallet, then configure two auxiliary wallets for lifecycle proof. Do not use the deployer for lifecycle proof.
 
-The earlier deployments `0x7c5e173E75CC5464b7a9ED5129a40637268071FB` and `0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622` are superseded and must not be submitted or used as passing E2E evidence.
+The deployments `0x7c5e173E75CC5464b7a9ED5129a40637268071FB`, `0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622`, and `0xa816CAe7E4c20ac44DE2d332b87775965076e533` are superseded and must not be submitted or used as passing E2E evidence.
 
 - Wallet A: create/fund as sponsor.
 - Wallet B: contributor submit plus independent challenge/recovery calls.

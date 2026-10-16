@@ -1,20 +1,28 @@
 {
   "network": "studionet",
-  "status": "superseded_live_validator_serialization_failure",
-  "address": "0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
-  "verified_at": "2026-10-15T08:26:52.762605Z",
+  "status": "active_live_e2e_verified",
+  "address": "0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024",
+  "verified_at": "2026-10-16T01:43:45Z",
   "source_parity": true,
-  "source_sha256": "635a000eec1aafc8246c8bd88983400185bc7036109d4ba524598ff26e2f2e49",
-  "deployed_sha256": "635a000eec1aafc8246c8bd88983400185bc7036109d4ba524598ff26e2f2e49",
-  "deployed_bytes": 14426,
+  "source_sha256": "8ab2124316902f950f6446fa9e6272aeae3fc1d55b3daba3f5e9a02019dad921",
+  "deployed_sha256": "8ab2124316902f950f6446fa9e6272aeae3fc1d55b3daba3f5e9a02019dad921",
   "config": {
     "schema": "mergeproof-covenant-v1",
-    "count": 0
+    "count": 1
   },
-  "explorer": "https://explorer-studio.genlayer.com/address/0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
-  "supersedes": "0x7c5e173E75CC5464b7a9ED5129a40637268071FB",
-  "passing_e2e": false,
-  "failure_tx": "0x4547bc36d0f1210f88f5f6b2ee16eb5adccc03ee87019064117004a116dd1d47",
-  "failure_effect": "verify_merge rejected; covenant remained PROOF_SUBMITTED",
-  "replacement": "pending"
+  "explorer": "https://explorer-studio.genlayer.com/address/0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024",
+  "supersedes": "0xa816CAe7E4c20ac44DE2d332b87775965076e533",
+  "passing_e2e": true,
+  "checks": 49,
+  "transactions": 20,
+  "payout_parent_tx": "0x489fe2b40ca43466ded78bdadd9b30e90e740911363ec41849f51e0f093b0e02",
+  "payout_child_tx": "0x167b8827ba9945137622af5ed5c6c0281a021f6b6bf6acba6420a86797e47a6b",
+  "confirm_tx": "0x7ba8121d734343abb45015da47573db3413d8c764cf221567f2918ea017c095b",
+  "final_phase": "SETTLED",
+  "paid": "1000000000000000",
+  "e2e_report": "verification/E2E_STUDIONET_21dac024.json",
+  "review_report": "verification/E2E_STUDIONET_21dac024.md",
+  "website": "https://mergeproof-covenant.pages.dev/",
+  "website_status": 200,
+  "website_active_contract_verified": true
 }
