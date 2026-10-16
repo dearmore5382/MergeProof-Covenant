@@ -1,5 +1,7 @@
 # MergeProof Covenant
 
+Live application: https://mergeproof-covenant.pages.dev/
+
 MergeProof is a GenLayer escrow for a single software milestone. It pays only after validators independently obtain GitHub-controlled PR, commit and changed-file facts and determine that the exact merged implementation satisfies sealed acceptance criteria.
 
 It is not an auction and does not reuse AuditCover's bid, commit/reveal, coverage-matrix or bundle-selection architecture.

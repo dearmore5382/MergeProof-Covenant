@@ -21,5 +21,8 @@
   "final_phase": "SETTLED",
   "paid": "1000000000000000",
   "e2e_report": "verification/E2E_STUDIONET_21dac024.json",
-  "review_report": "verification/E2E_STUDIONET_21dac024.md"
+  "review_report": "verification/E2E_STUDIONET_21dac024.md",
+  "website": "https://mergeproof-covenant.pages.dev/",
+  "website_status": 200,
+  "website_active_contract_verified": true
 }
