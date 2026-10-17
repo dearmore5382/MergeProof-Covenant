@@ -1,5 +1,7 @@
 # MergeProof Covenant
 
+> Steward remediation source is now schema `mergeproof-covenant-v2`. It binds adjudication to GitHub PR patches, preserves challenge liveness after the cutoff, and combines same-address partial payout/refund credits without value loss. See [the steward response](docs/STEWARD_RESPONSE.md). A fresh v2 StudioNet deployment is required before these corrections are resubmitted as live evidence; the v1 address below documents the previous run only.
+
 Live application: https://mergeproof-covenant.pages.dev/
 
 MergeProof is a GenLayer escrow for a single software milestone. It pays only after validators independently obtain GitHub-controlled PR, commit and changed-file facts and determine that the exact merged implementation satisfies sealed acceptance criteria.
@@ -40,7 +42,7 @@ The gate runs Direct Mode against the submitted public contract methods, GenVM l
 
 ## Deploy and live test
 
-Active StudioNet deployment: `0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024`. Its deployed source matches `contracts/MergeProofCovenant.py` byte-for-byte at SHA-256 `8ab2124316902f950f6446fa9e6272aeae3fc1d55b3daba3f5e9a02019dad921`. A two-wallet live run completed 49 checks and 20 finalized transactions, including source-bound adjudication, challenge/recheck, exact native payout, receipt confirmation, replay rejection and value conservation. See `verification/E2E_STUDIONET_21dac024.md` and the complete receipt record in `verification/E2E_STUDIONET_21dac024.json`.
+Previous v1 StudioNet deployment: `0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024`. Its archived source matched SHA-256 `8ab2124316902f950f6446fa9e6272aeae3fc1d55b3daba3f5e9a02019dad921`, and its two-wallet run completed 49 checks and 20 finalized transactions. That run predates the v2 steward remediation and must not be presented as evidence for the three corrected paths. See `verification/E2E_STUDIONET_21dac024.md` and `verification/E2E_STUDIONET_21dac024.json` for historical evidence only.
 
 Address `0xa816CAe7E4c20ac44DE2d332b87775965076e533` proved source parity and the lifecycle through native payout, but its confirmation rejected StudioNet's canonical numeric finalized status and optional transfer type. The payout transferred correctly while authoritative accounting remained `TRANSFER_PENDING`; the run is retained as diagnostic evidence and is not presented as passing E2E evidence.
 
