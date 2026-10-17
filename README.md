@@ -1,6 +1,6 @@
 # MergeProof Covenant
 
-> Steward remediation source is now schema `mergeproof-covenant-v2`. It binds adjudication to GitHub PR patches, preserves challenge liveness after the cutoff, and combines same-address partial payout/refund credits without value loss. See [the steward response](docs/STEWARD_RESPONSE.md). A fresh v2 StudioNet deployment is required before these corrections are resubmitted as live evidence; the v1 address below documents the previous run only.
+> Current StudioNet deployment uses schema `mergeproof-covenant-v2`: `0xC98759C893D0B515a4AB866aFA8a65C87E4ea648`. Live evidence covers PR patch binding, post-cutoff challenge resolution, and combined same-address partial credits. The run also contains three clearly documented non-passing observations (transient source unavailability and a challenge submitted after its cutoff); see [the live report](verification/E2E_STUDIONET_C98759.md) and [steward response](docs/STEWARD_RESPONSE.md).
 
 Live application: https://mergeproof-covenant.pages.dev/
 
@@ -28,7 +28,7 @@ funded nonterminal state after expiry → RECOVERED → sponsor refund
 
 ## GitHub authority
 
-The contract calls GitHub's API for the exact repository and PR, verifies merge state, base branch, full merge SHA and commit identity, then fetches every required production/test blob at that immutable SHA and recomputes its digest. Validators evaluate the actual bytes, not claimant prose or filenames. Source unavailability fails closed. See [source manifest](docs/TEST_RESOURCE_MANIFEST.md) and [threat model](docs/THREAT_MODEL.md).
+The contract calls GitHub's API for the exact repository and PR, verifies merge state, base branch, full merge SHA and commit identity, and requires a patch for every selected production/test path. Validators assess work shown in those PR patches and use blobs fetched at the immutable merge SHA as context; missing patches fail closed. Source unavailability fails closed. See [source manifest](docs/TEST_RESOURCE_MANIFEST.md) and [threat model](docs/THREAT_MODEL.md).
 
 ## Local verification
 
@@ -42,7 +42,9 @@ The gate runs Direct Mode against the submitted public contract methods, GenVM l
 
 ## Deploy and live test
 
-Previous v1 StudioNet deployment: `0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024`. Its archived source matched SHA-256 `8ab2124316902f950f6446fa9e6272aeae3fc1d55b3daba3f5e9a02019dad921`, and its two-wallet run completed 49 checks and 20 finalized transactions. That run predates the v2 steward remediation and must not be presented as evidence for the three corrected paths. See `verification/E2E_STUDIONET_21dac024.md` and `verification/E2E_STUDIONET_21dac024.json` for historical evidence only.
+Active v2 StudioNet deployment: `0xC98759C893D0B515a4AB866aFA8a65C87E4ea648`. Source parity passed with SHA-256 `fe4098b53f343e613763d633c22388acfca883968f45eb01b13a3b2c44ca031a`. Live report records the raw 92/95 check result across 34 finalized transaction attempts, with each non-passing observation explained. The confirmed covenants are #1 (SATISFIED), #2 (PARTIAL same-address settlement), and #3 (challenge accepted before cutoff, resolved after cutoff, then finalized). See [the v2 live report](verification/E2E_STUDIONET_C98759.md) and [machine-readable receipts](verification/E2E_STUDIONET_7e4ea648.json).
+
+Previous v1 StudioNet deployment: `0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024`. Its archived source matched SHA-256 `8ab2124316902f950f6446fa9e6272aeae3fc1d55b3daba3f5e9a02019dad921`, and its two-wallet run completed 49 checks and 20 finalized transactions. That run predates the v2 steward remediation and is historical only. See `verification/E2E_STUDIONET_21dac024.md` and `verification/E2E_STUDIONET_21dac024.json`.
 
 Address `0xa816CAe7E4c20ac44DE2d332b87775965076e533` proved source parity and the lifecycle through native payout, but its confirmation rejected StudioNet's canonical numeric finalized status and optional transfer type. The payout transferred correctly while authoritative accounting remained `TRANSFER_PENDING`; the run is retained as diagnostic evidence and is not presented as passing E2E evidence.
 

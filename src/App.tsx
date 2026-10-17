@@ -23,7 +23,7 @@ declare global {
 }
 const reader = createClient({ chain: studionet });
 const explorer = "https://explorer-studio.genlayer.com";
-const deployedAddress = import.meta.env.VITE_CONTRACT_ADDRESS || "0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024";
+const deployedAddress = import.meta.env.VITE_CONTRACT_ADDRESS || "0xC98759C893D0B515a4AB866aFA8a65C87E4ea648";
 const short = (x: string) =>
   x ? `${x.slice(0, 6)}…${x.slice(-4)}` : "Not connected";
 export default function App() {
@@ -275,7 +275,7 @@ export default function App() {
                       <b>{nextAction(phase, wallet, c)}</b>
                     </div>
                   </div>
-                  <div className="proof">
+          <div className="proof">
                     <h3>Authoritative merge proof</h3>
                     <div className="sha">
                       {c.verdict?.snapshot?.merge_sha ||
