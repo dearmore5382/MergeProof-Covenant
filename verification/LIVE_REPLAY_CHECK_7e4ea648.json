@@ -1,0 +1,458 @@
+{
+  "schema": "mergeproof-live-replay-check-v1",
+  "network": "studionet",
+  "contract": "0xC98759C893D0B515a4AB866aFA8a65C87E4ea648",
+  "repository": "dearmore5382/MergeProof-Covenant",
+  "pull_request": 4,
+  "budget_wei": "1",
+  "roles": {
+    "sponsor": "0x736A168247e3f0C52F7907c9a8fDac572DF9c8bB",
+    "contributor": "0xA63DE24e30C88FB1019E8956654730316e36eDBE"
+  },
+  "transactions": [
+    {
+      "label": "create one-wei replay covenant",
+      "actor": "0x736A168247e3f0C52F7907c9a8fDac572DF9c8bB",
+      "function": "create_covenant",
+      "args": [
+        "{\"base_branch\":\"main\",\"budget\":1,\"challenge_end\":1792207743,\"contributor\":\"0xa63de24e30c88fb1019e8956654730316e36edbe\",\"criteria\":[\"The exact merged implementation binds proof to pull request changes.\",\"Regression tests cover the source-bound milestone behavior.\"],\"expires\":1792208043,\"partial_bps\":0,\"production_prefix\":\"contracts/\",\"proof_deadline\":1792207443,\"repo\":\"dearmore5382/MergeProof-Covenant\",\"test_prefix\":\"tests/\",\"title\":\"One-wei live duplicate merge check\"}"
+      ],
+      "value": "0",
+      "before": {
+        "clock": "2026-10-17T03:19:02.836985Z",
+        "count": 5,
+        "schema": "mergeproof-covenant-v2"
+      },
+      "hash": "0xe2584cdec79cd9d1cb1d5650b03f6f8c90ba5f566ebe9ddc02d591e9f7c66b6e",
+      "receipt": {
+        "hash": "0xe2584cdec79cd9d1cb1d5650b03f6f8c90ba5f566ebe9ddc02d591e9f7c66b6e",
+        "status": 7,
+        "leader_execution_result": "SUCCESS",
+        "leader_result_status": "return",
+        "leader_result_payload": {
+          "raw": [
+            41
+          ],
+          "readable": "5"
+        }
+      },
+      "after": {
+        "clock": "2026-10-17T03:19:45.496160Z",
+        "count": 6,
+        "schema": "mergeproof-covenant-v2"
+      },
+      "execution": {
+        "status": 7,
+        "consensus_votes": {
+          "0x044f5Cb4DB97843236A9ee36BBE6bA2CE827DEf5": "agree",
+          "0x4694C11A556537362bCe7b0F09435118baFF592d": "agree",
+          "0x6BCDDf292694Ec8AA930A53812DbBB546731bC17": "agree",
+          "0xacb3A709E6212931De1a712a1710a6955c7d40c0": "agree",
+          "0xc5dAA81d1eD1C0F2C6aD839b7FDe9f7D65AE27A3": "agree"
+        },
+        "leader_execution_result": "SUCCESS",
+        "leader_result_status": "return",
+        "leader_result_payload": {
+          "raw": [
+            41
+          ],
+          "readable": "5"
+        },
+        "readable": "5"
+      },
+      "returned": 5
+    },
+    {
+      "label": "fund one wei",
+      "actor": "0x736A168247e3f0C52F7907c9a8fDac572DF9c8bB",
+      "function": "fund",
+      "args": [
+        5
+      ],
+      "value": "1",
+      "before": {
+        "challenge": null,
+        "credits": {},
+        "held": 0,
+        "id": 5,
+        "paid": 0,
+        "pending": 0,
+        "phase": "DRAFT",
+        "proof": null,
+        "refunded": 0,
+        "sponsor": "0x736a168247e3f0c52f7907c9a8fdac572df9c8bb",
+        "terms": {
+          "base_branch": "main",
+          "budget": 1,
+          "challenge_end": 1792207743,
+          "contributor": "0xa63de24e30c88fb1019e8956654730316e36edbe",
+          "criteria": [
+            "The exact merged implementation binds proof to pull request changes.",
+            "Regression tests cover the source-bound milestone behavior."
+          ],
+          "expires": 1792208043,
+          "partial_bps": 0,
+          "production_prefix": "contracts/",
+          "proof_deadline": 1792207443,
+          "repo": "dearmore5382/MergeProof-Covenant",
+          "test_prefix": "tests/",
+          "title": "One-wei live duplicate merge check"
+        },
+        "terms_digest": "7b0fe75ab24e4d49fef966c038ad9dea13bc7021ab8f1838cb9d5f4a1ef693ed",
+        "verdict": null
+      },
+      "hash": "0x0300dfe97796e61fe6ae0a02fdea7035b710245ef0363587a829bb89b6c41169",
+      "receipt": {
+        "hash": "0x0300dfe97796e61fe6ae0a02fdea7035b710245ef0363587a829bb89b6c41169",
+        "status": 7,
+        "leader_execution_result": "SUCCESS",
+        "leader_result_status": "return",
+        "leader_result_payload": {
+          "raw": [
+            52,
+            70,
+            85,
+            78,
+            68,
+            69,
+            68
+          ],
+          "readable": "\"FUNDED\""
+        }
+      },
+      "after": {
+        "challenge": null,
+        "credits": {},
+        "held": 1,
+        "id": 5,
+        "paid": 0,
+        "pending": 0,
+        "phase": "FUNDED",
+        "proof": null,
+        "refunded": 0,
+        "sponsor": "0x736a168247e3f0c52f7907c9a8fdac572df9c8bb",
+        "terms": {
+          "base_branch": "main",
+          "budget": 1,
+          "challenge_end": 1792207743,
+          "contributor": "0xa63de24e30c88fb1019e8956654730316e36edbe",
+          "criteria": [
+            "The exact merged implementation binds proof to pull request changes.",
+            "Regression tests cover the source-bound milestone behavior."
+          ],
+          "expires": 1792208043,
+          "partial_bps": 0,
+          "production_prefix": "contracts/",
+          "proof_deadline": 1792207443,
+          "repo": "dearmore5382/MergeProof-Covenant",
+          "test_prefix": "tests/",
+          "title": "One-wei live duplicate merge check"
+        },
+        "terms_digest": "7b0fe75ab24e4d49fef966c038ad9dea13bc7021ab8f1838cb9d5f4a1ef693ed",
+        "verdict": null
+      },
+      "execution": {
+        "status": 7,
+        "consensus_votes": {
+          "0x1b170f7676410646709fDF16A279Ae4f8c4dC7AE": "idle",
+          "0x60929ddB1a5E6Db6f1E198038E0D56547c10f275": "agree",
+          "0x6BCDDf292694Ec8AA930A53812DbBB546731bC17": "agree",
+          "0x7405D7e5f9e1016ed13847B93Bcf7D8553688Ec9": "agree",
+          "0x84b5C0320Cf213d1e0F4313aD46dBde0cBA3a48b": "agree"
+        },
+        "leader_execution_result": "SUCCESS",
+        "leader_result_status": "return",
+        "leader_result_payload": {
+          "raw": [
+            52,
+            70,
+            85,
+            78,
+            68,
+            69,
+            68
+          ],
+          "readable": "\"FUNDED\""
+        },
+        "readable": "\"FUNDED\""
+      },
+      "returned": "FUNDED"
+    },
+    {
+      "label": "submit already-used PR #4",
+      "actor": "0xA63DE24e30C88FB1019E8956654730316e36eDBE",
+      "function": "submit_merge",
+      "args": [
+        5,
+        4
+      ],
+      "value": "0",
+      "before": {
+        "challenge": null,
+        "credits": {},
+        "held": 1,
+        "id": 5,
+        "paid": 0,
+        "pending": 0,
+        "phase": "FUNDED",
+        "proof": null,
+        "refunded": 0,
+        "sponsor": "0x736a168247e3f0c52f7907c9a8fdac572df9c8bb",
+        "terms": {
+          "base_branch": "main",
+          "budget": 1,
+          "challenge_end": 1792207743,
+          "contributor": "0xa63de24e30c88fb1019e8956654730316e36edbe",
+          "criteria": [
+            "The exact merged implementation binds proof to pull request changes.",
+            "Regression tests cover the source-bound milestone behavior."
+          ],
+          "expires": 1792208043,
+          "partial_bps": 0,
+          "production_prefix": "contracts/",
+          "proof_deadline": 1792207443,
+          "repo": "dearmore5382/MergeProof-Covenant",
+          "test_prefix": "tests/",
+          "title": "One-wei live duplicate merge check"
+        },
+        "terms_digest": "7b0fe75ab24e4d49fef966c038ad9dea13bc7021ab8f1838cb9d5f4a1ef693ed",
+        "verdict": null
+      },
+      "hash": "0x8db7bf315ee03745dcf1ed33074ca24e608479f807d1ffa9cc733874f0ffd6f0",
+      "receipt": {
+        "hash": "0x8db7bf315ee03745dcf1ed33074ca24e608479f807d1ffa9cc733874f0ffd6f0",
+        "status": 7,
+        "leader_execution_result": "SUCCESS",
+        "leader_result_status": "return",
+        "leader_result_payload": {
+          "raw": [
+            124,
+            80,
+            82,
+            79,
+            79,
+            70,
+            95,
+            83,
+            85,
+            66,
+            77,
+            73,
+            84,
+            84,
+            69,
+            68
+          ],
+          "readable": "\"PROOF_SUBMITTED\""
+        }
+      },
+      "after": {
+        "challenge": null,
+        "credits": {},
+        "held": 1,
+        "id": 5,
+        "paid": 0,
+        "pending": 0,
+        "phase": "PROOF_SUBMITTED",
+        "proof": {
+          "pr": 4,
+          "submitter": "0xa63de24e30c88fb1019e8956654730316e36edbe"
+        },
+        "refunded": 0,
+        "sponsor": "0x736a168247e3f0c52f7907c9a8fdac572df9c8bb",
+        "terms": {
+          "base_branch": "main",
+          "budget": 1,
+          "challenge_end": 1792207743,
+          "contributor": "0xa63de24e30c88fb1019e8956654730316e36edbe",
+          "criteria": [
+            "The exact merged implementation binds proof to pull request changes.",
+            "Regression tests cover the source-bound milestone behavior."
+          ],
+          "expires": 1792208043,
+          "partial_bps": 0,
+          "production_prefix": "contracts/",
+          "proof_deadline": 1792207443,
+          "repo": "dearmore5382/MergeProof-Covenant",
+          "test_prefix": "tests/",
+          "title": "One-wei live duplicate merge check"
+        },
+        "terms_digest": "7b0fe75ab24e4d49fef966c038ad9dea13bc7021ab8f1838cb9d5f4a1ef693ed",
+        "verdict": null
+      },
+      "execution": {
+        "status": 7,
+        "consensus_votes": {
+          "0x4807398866238CaF8910A9c4Fe7eB444d2Ed144A": "agree",
+          "0xEcf0fed53b8baf5A6d376CFF2894aa66fcBCa13C": "agree",
+          "0xacb3A709E6212931De1a712a1710a6955c7d40c0": "agree",
+          "0xbfC623617377D02992F9c125CBBC3Bb1Cb3c9E4D": "agree",
+          "0xd7dfBe383b6421cdE13b94ED62f81772156B4a43": "agree"
+        },
+        "leader_execution_result": "SUCCESS",
+        "leader_result_status": "return",
+        "leader_result_payload": {
+          "raw": [
+            124,
+            80,
+            82,
+            79,
+            79,
+            70,
+            95,
+            83,
+            85,
+            66,
+            77,
+            73,
+            84,
+            84,
+            69,
+            68
+          ],
+          "readable": "\"PROOF_SUBMITTED\""
+        },
+        "readable": "\"PROOF_SUBMITTED\""
+      },
+      "returned": "PROOF_SUBMITTED"
+    },
+    {
+      "label": "verify reused merge SHA",
+      "actor": "0x736A168247e3f0C52F7907c9a8fDac572DF9c8bB",
+      "function": "verify_merge",
+      "args": [
+        5
+      ],
+      "value": "0",
+      "before": {
+        "challenge": null,
+        "credits": {},
+        "held": 1,
+        "id": 5,
+        "paid": 0,
+        "pending": 0,
+        "phase": "PROOF_SUBMITTED",
+        "proof": {
+          "pr": 4,
+          "submitter": "0xa63de24e30c88fb1019e8956654730316e36edbe"
+        },
+        "refunded": 0,
+        "sponsor": "0x736a168247e3f0c52f7907c9a8fdac572df9c8bb",
+        "terms": {
+          "base_branch": "main",
+          "budget": 1,
+          "challenge_end": 1792207743,
+          "contributor": "0xa63de24e30c88fb1019e8956654730316e36edbe",
+          "criteria": [
+            "The exact merged implementation binds proof to pull request changes.",
+            "Regression tests cover the source-bound milestone behavior."
+          ],
+          "expires": 1792208043,
+          "partial_bps": 0,
+          "production_prefix": "contracts/",
+          "proof_deadline": 1792207443,
+          "repo": "dearmore5382/MergeProof-Covenant",
+          "test_prefix": "tests/",
+          "title": "One-wei live duplicate merge check"
+        },
+        "terms_digest": "7b0fe75ab24e4d49fef966c038ad9dea13bc7021ab8f1838cb9d5f4a1ef693ed",
+        "verdict": null
+      },
+      "hash": "0xa0857156e5aba634e7ff7f534623abb919b85706c738fce876630259565f436d",
+      "receipt": {
+        "hash": "0xa0857156e5aba634e7ff7f534623abb919b85706c738fce876630259565f436d",
+        "status": 7,
+        "leader_execution_result": "ERROR",
+        "leader_result_status": "rollback",
+        "leader_result_payload": "MERGE_ALREADY_USED"
+      },
+      "after": {
+        "challenge": null,
+        "credits": {},
+        "held": 1,
+        "id": 5,
+        "paid": 0,
+        "pending": 0,
+        "phase": "PROOF_SUBMITTED",
+        "proof": {
+          "pr": 4,
+          "submitter": "0xa63de24e30c88fb1019e8956654730316e36edbe"
+        },
+        "refunded": 0,
+        "sponsor": "0x736a168247e3f0c52f7907c9a8fdac572df9c8bb",
+        "terms": {
+          "base_branch": "main",
+          "budget": 1,
+          "challenge_end": 1792207743,
+          "contributor": "0xa63de24e30c88fb1019e8956654730316e36edbe",
+          "criteria": [
+            "The exact merged implementation binds proof to pull request changes.",
+            "Regression tests cover the source-bound milestone behavior."
+          ],
+          "expires": 1792208043,
+          "partial_bps": 0,
+          "production_prefix": "contracts/",
+          "proof_deadline": 1792207443,
+          "repo": "dearmore5382/MergeProof-Covenant",
+          "test_prefix": "tests/",
+          "title": "One-wei live duplicate merge check"
+        },
+        "terms_digest": "7b0fe75ab24e4d49fef966c038ad9dea13bc7021ab8f1838cb9d5f4a1ef693ed",
+        "verdict": null
+      },
+      "execution": {
+        "status": 7,
+        "consensus_votes": {
+          "0x02282326D058fE2d889F41BF01E14A72D800fa6F": "agree",
+          "0x60929ddB1a5E6Db6f1E198038E0D56547c10f275": "agree",
+          "0xEcf0fed53b8baf5A6d376CFF2894aa66fcBCa13C": "disagree",
+          "0xc5dAA81d1eD1C0F2C6aD839b7FDe9f7D65AE27A3": "disagree",
+          "0xd7dfBe383b6421cdE13b94ED62f81772156B4a43": "agree"
+        },
+        "leader_execution_result": "ERROR",
+        "leader_result_status": "rollback",
+        "leader_result_payload": "MERGE_ALREADY_USED",
+        "readable": "MERGE_ALREADY_USED"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "name": "exact source parity",
+      "pass": true,
+      "detail": {
+        "source_sha256": "fe4098b53f343e613763d633c22388acfca883968f45eb01b13a3b2c44ca031a",
+        "deployed_sha256": "fe4098b53f343e613763d633c22388acfca883968f45eb01b13a3b2c44ca031a"
+      }
+    },
+    {
+      "name": "v2 contract schema",
+      "pass": true,
+      "detail": {
+        "clock": "2026-10-17T03:25:18.201163Z",
+        "count": 6,
+        "schema": "mergeproof-covenant-v2"
+      }
+    },
+    {
+      "name": "covenant id returned",
+      "pass": true,
+      "detail": {
+        "cid": 5
+      }
+    },
+    {
+      "name": "MERGE_ALREADY_USED rejection leaves covenant unchanged",
+      "pass": true,
+      "detail": {
+        "readable": "MERGE_ALREADY_USED",
+        "phase_before": "PROOF_SUBMITTED",
+        "phase_after": "PROOF_SUBMITTED"
+      }
+    }
+  ],
+  "started_at": "2026-10-17T03:19:01.504Z",
+  "covenant_id": 5,
+  "result": "REPLAY_REJECTED",
+  "finished_at": "2026-10-17T03:25:24.791Z"
+}

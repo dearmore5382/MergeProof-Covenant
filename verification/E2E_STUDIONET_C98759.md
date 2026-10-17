@@ -51,10 +51,23 @@ The single confirmed native transfer left `held=0`, `pending=0`, `paid=500000000
 | Native child transfer | [0xe401…9596](https://explorer-studio.genlayer.com/transactions/0xe4014aa382bb0c277751d37e734f1c4d248dcbcfe23c6d5a3c2daa6a34eb9596) |
 | Confirm combined payout/refund | [0x0660…86ce](https://explorer-studio.genlayer.com/transactions/0x06601a61a483d79c01f6066920230a1293abf13f746115420566b9bb86eb86ce) |
 
-## Other live outcomes and remaining gap
+## Other live outcomes and original raw diagnostics
 
 - A separate challenge submitted near the cutoff was finalized after the cutoff and correctly rejected with no state change. The earlier test expectation assumed it would arrive in time; the later dedicated covenant demonstrates the accepted-before-cutoff, resolved-after-cutoff path.
-- Reusing a finalized merge reached a temporary GitHub `SOURCE_UNAVAILABLE` result. The contract created no payout credit, but this run did not obtain a live `MERGE_ALREADY_USED` rejection. Local Direct Mode covers the deterministic duplicate-merge rejection; a live retry is still needed for that specific case.
+- Reusing a finalized merge in the original run reached a temporary GitHub `SOURCE_UNAVAILABLE` result and created no payout credit. That original raw observation remains unchanged in the machine report; a later focused retry is recorded below.
 - Other checked cases include wrong wallet, underfund/overfund by one wei, wrong submitter, payout replay, exact native transfer receipts, and partial accounting conservation.
 
 Local verification for the merged source: 19/19 Direct Mode contract tests, GenVM lint/schema validation, 8/8 frontend tests, and production build passed. The machine-readable live record remains unchanged and retains the three non-passing raw checks.
+
+## Focused live duplicate-merge retry
+
+A separate 1-wei covenant (#5) used contributor wallet `0xA63DE24e30C88FB1019E8956654730316e36eDBE` to submit already-finalized PR #4, whose merge SHA is already recorded in the contract's single-use registry. Exact deployed-source parity and the v2 schema were rechecked before the test. Verification finalized with leader result `ERROR`, transaction result `rollback`, and payload `MERGE_ALREADY_USED`; the covenant remained `PROOF_SUBMITTED` with its 1-wei budget held and no credits. This confirms duplicate-merge rejection live without rewriting the earlier 92/95 report.
+
+| Action | Finalized transaction |
+| --- | --- |
+| Create replay-check covenant #5 | [0xe258…6b6e](https://explorer-studio.genlayer.com/transactions/0xe2584cdec79cd9d1cb1d5650b03f6f8c90ba5f566ebe9ddc02d591e9f7c66b6e) |
+| Fund with 1 wei | [0x0300…1169](https://explorer-studio.genlayer.com/transactions/0x0300dfe97796e61fe6ae0a02fdea7035b710245ef0363587a829bb89b6c41169) |
+| Contributor submits already-used PR #4 | [0x8db7…d6f0](https://explorer-studio.genlayer.com/transactions/0x8db7bf315ee03745dcf1ed33074ca24e608479f807d1ffa9cc733874f0ffd6f0) |
+| Verify rejects reused merge (`MERGE_ALREADY_USED`) | [0xa085…436d](https://explorer-studio.genlayer.com/transactions/0xa0857156e5aba634e7ff7f534623abb919b85706c738fce876630259565f436d) |
+
+The 1 wei remains held in this intentionally minimal test covenant until expiry (`2026-10-17 03:34:03 UTC`); the sponsor can use the contract's expiry recovery path afterward. Machine-readable receipts and state snapshots: [LIVE_REPLAY_CHECK_7e4ea648.json](LIVE_REPLAY_CHECK_7e4ea648.json). Reproduction runner: [live_replay_check.mjs](../scripts/live_replay_check.mjs).

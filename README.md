@@ -1,6 +1,6 @@
 # MergeProof Covenant
 
-> Current StudioNet deployment uses schema `mergeproof-covenant-v2`: `0xC98759C893D0B515a4AB866aFA8a65C87E4ea648`. Live evidence covers PR patch binding, post-cutoff challenge resolution, and combined same-address partial credits. The run also contains three clearly documented non-passing observations (transient source unavailability and a challenge submitted after its cutoff); see [the live report](verification/E2E_STUDIONET_C98759.md) and [steward response](docs/STEWARD_RESPONSE.md).
+> Current StudioNet deployment uses schema `mergeproof-covenant-v2`: `0xC98759C893D0B515a4AB866aFA8a65C87E4ea648`. Live evidence covers PR patch binding, post-cutoff challenge resolution, combined same-address partial credits, and a separate finalized `MERGE_ALREADY_USED` duplicate-merge rejection. The original E2E report's three non-passing observations remain preserved; see [the live report](verification/E2E_STUDIONET_C98759.md), [focused replay evidence](verification/LIVE_REPLAY_CHECK_7e4ea648.json), and [steward response](docs/STEWARD_RESPONSE.md).
 
 Live application: https://mergeproof-covenant.pages.dev/
 
@@ -42,7 +42,7 @@ The gate runs Direct Mode against the submitted public contract methods, GenVM l
 
 ## Deploy and live test
 
-Active v2 StudioNet deployment: `0xC98759C893D0B515a4AB866aFA8a65C87E4ea648`. Source parity passed with SHA-256 `fe4098b53f343e613763d633c22388acfca883968f45eb01b13a3b2c44ca031a`. Live report records the raw 92/95 check result across 34 finalized transaction attempts, with each non-passing observation explained. The confirmed covenants are #1 (SATISFIED), #2 (PARTIAL same-address settlement), and #3 (challenge accepted before cutoff, resolved after cutoff, then finalized). See [the v2 live report](verification/E2E_STUDIONET_C98759.md) and [machine-readable receipts](verification/E2E_STUDIONET_7e4ea648.json).
+Active v2 StudioNet deployment: `0xC98759C893D0B515a4AB866aFA8a65C87E4ea648`. Source parity passed with SHA-256 `fe4098b53f343e613763d633c22388acfca883968f45eb01b13a3b2c44ca031a`. The original live report preserves its raw 92/95 result across 34 finalized transaction attempts. A separate focused retry confirms the single-use merge registry rejects reused PR #4 with `MERGE_ALREADY_USED` and no state mutation. Confirmed covenants include #1 (SATISFIED), #2 (PARTIAL same-address settlement), #3 (challenge accepted before cutoff, resolved after cutoff, then finalized), and #5 (duplicate merge rejected). See [the v2 live report](verification/E2E_STUDIONET_C98759.md), [original machine-readable receipts](verification/E2E_STUDIONET_7e4ea648.json), and [focused replay evidence](verification/LIVE_REPLAY_CHECK_7e4ea648.json).
 
 Previous v1 StudioNet deployment: `0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024`. Its archived source matched SHA-256 `8ab2124316902f950f6446fa9e6272aeae3fc1d55b3daba3f5e9a02019dad921`, and its two-wallet run completed 49 checks and 20 finalized transactions. That run predates the v2 steward remediation and is historical only. See `verification/E2E_STUDIONET_21dac024.md` and `verification/E2E_STUDIONET_21dac024.json`.
 
