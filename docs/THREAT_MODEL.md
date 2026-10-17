@@ -11,6 +11,9 @@
 | Wrong attached value | Exact payable equality |
 | Verdict chooses arbitrary money | Fixed outcome-to-payout mapping |
 | Infinite appeal | One challenge state and bounded deadline |
+| Challenge filed immediately before cutoff | Re-adjudication remains permissionless until covenant expiry, including after `challenge_end` |
+| Pre-existing post-merge code claimed as milestone work | Verdict is bound to GitHub's PR patches; post-merge blobs are context only |
+| Sponsor and contributor are the same address | Payout and refund components are combined without overwriting and accounted separately |
 | Held funds after disappearance | Permissionless expiry recovery credits sponsor |
 | Transfer emission mistaken for payment | Pending state until canonical receipt confirmation |
 | Receipt replay | Single-use child-receipt index |

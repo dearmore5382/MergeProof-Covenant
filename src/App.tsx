@@ -66,7 +66,7 @@ export default function App() {
       functionName: "get_config",
       args: [],
     });
-    if ((cfg as any).schema !== "mergeproof-covenant-v1")
+    if ((cfg as any).schema !== "mergeproof-covenant-v2")
       throw Error("Address is not MergeProof Covenant.");
     const v = await reader.readContract({
       address: address as `0x${string}`,

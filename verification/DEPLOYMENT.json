@@ -1,6 +1,6 @@
 {
   "network": "studionet",
-  "status": "active_live_e2e_verified",
+  "status": "historical_v1_live_e2e_superseded_by_v2_source",
   "address": "0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024",
   "verified_at": "2026-10-16T01:43:45Z",
   "source_parity": true,
@@ -13,6 +13,8 @@
   "explorer": "https://explorer-studio.genlayer.com/address/0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024",
   "supersedes": "0xa816CAe7E4c20ac44DE2d332b87775965076e533",
   "passing_e2e": true,
+  "current_source_compatible": false,
+  "note": "This passing run predates the v2 steward remediation and is historical only. Deploy and verify v2 before resubmission.",
   "checks": 49,
   "transactions": 20,
   "payout_parent_tx": "0x489fe2b40ca43466ded78bdadd9b30e90e740911363ec41849f51e0f093b0e02",
