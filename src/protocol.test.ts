@@ -31,6 +31,7 @@ describe("frontend authority", () => {
     expect(execution(tx)).toBe("FUNDED");
     expect(() => execution({ ...tx, consensus_data: { ...tx.consensus_data, votes: { a: "agree" } } })).toThrow(/consensus/);
     expect(() => execution({ ...tx, consensus_data: { ...tx.consensus_data, leader_receipt: [{ mode: "leader", execution_result: "ERROR", result: { status: "contract_error", payload: "exit_code 1" } }] } })).toThrow(/exit_code 1/);
+    expect(() => execution({ ...tx, consensus_data: { ...tx.consensus_data, leader_receipt: [{ mode: "leader", execution_result: "ERROR", result: { status: "rollback", payload: "MERGE_ALREADY_USED" } }] } })).toThrow(/MERGE_ALREADY_USED/);
   });
   it("derives action from authoritative role", () => {
     expect(nextAction("DRAFT", c.sponsor, c)).toBe("FUND");

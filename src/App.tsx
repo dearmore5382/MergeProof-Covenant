@@ -24,6 +24,9 @@ declare global {
 const reader = createClient({ chain: studionet });
 const explorer = "https://explorer-studio.genlayer.com";
 const deployedAddress = import.meta.env.VITE_CONTRACT_ADDRESS || "0xC98759C893D0B515a4AB866aFA8a65C87E4ea648";
+const replayEvidenceAddress = "0xC98759C893D0B515a4AB866aFA8a65C87E4ea648";
+const replayVerifyHash = "0xa0857156e5aba634e7ff7f534623abb919b85706c738fce876630259565f436d";
+const replayReportUrl = "https://github.com/dearmore5382/MergeProof-Covenant/blob/06d04db6aef0872e227a32025232f6ef415bd271/verification/E2E_STUDIONET_C98759.md#focused-live-duplicate-merge-retry";
 const short = (x: string) =>
   x ? `${x.slice(0, 6)}…${x.slice(-4)}` : "Not connected";
 export default function App() {
@@ -31,7 +34,7 @@ export default function App() {
     localStorage.getItem("mergeproof-address") || deployedAddress,
   );
   const [wallet, setWallet] = useState("");
-  const [id, setId] = useState(0);
+  const [id, setId] = useState(5);
   const [c, setC] = useState<Covenant>();
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState(
@@ -114,7 +117,18 @@ export default function App() {
         interval: 3000,
       });
       const tx = await reader.getTransaction({ hash });
-      const result = execution(tx);
+      let result: unknown;
+      try {
+        result = execution(tx);
+      } catch (transactionError) {
+        try {
+          await sync();
+        } catch {
+          // Keep the finalized transaction error visible if the read RPC is unavailable.
+        }
+        setNotice(`Transaction finalized with a contract rollback; state was refreshed when available. ${hash}`);
+        throw transactionError;
+      }
       const selectedId = method === "create_covenant" ? Number(result) : id;
       if (!Number.isInteger(selectedId) || selectedId < 0) throw Error("Invalid covenant ID returned by contract.");
       if (method === "create_covenant") setId(selectedId);
@@ -233,6 +247,53 @@ export default function App() {
         </section>
         {error && <div className="alert error">{error}</div>}
         <div className="alert">{notice}</div>
+        {tab === "dossier" && address.toLowerCase() === replayEvidenceAddress.toLowerCase() && (
+          <section className="live-evidence">
+            <div className="live-evidence-head">
+              <div>
+                <p className="eyebrow">STUDIONET · LIVE REGRESSION</p>
+                <h2>Duplicate merge replay blocked</h2>
+              </div>
+              <span className="evidence-badge">PASS · ON-CHAIN</span>
+            </div>
+            <p className="live-evidence-copy">
+              PR #4 was already finalized and recorded. A second covenant submitted the same PR;
+              its verification finalized as a rollback with <code>MERGE_ALREADY_USED</code> and
+              created no credit. The original 92/95 report remains intact; this focused retry has
+              its own receipt record.
+            </p>
+            <div className="evidence-state">
+              <div>
+                <small>TEST COVENANT</small>
+                <b>#5 · {c?.id === 5 ? c.phase.replaceAll("_", " ") : "not loaded"}</b>
+              </div>
+              <div>
+                <small>HELD ESCROW</small>
+                <b>{c?.id === 5 ? `${c.held} wei` : "Sync covenant #5 to read"}</b>
+              </div>
+              <div>
+                <small>AUTHORIZED CREDITS</small>
+                <b>{c?.id === 5 ? Object.keys(c.credits || {}).length : "—"}</b>
+              </div>
+            </div>
+            <div className="live-evidence-links">
+              <a href={`${explorer}/transactions/${replayVerifyHash}`} target="_blank" rel="noreferrer">
+                Open finalized rejection transaction ↗
+              </a>
+              <a href={replayReportUrl} target="_blank" rel="noreferrer">
+                Full E2E evidence and all four tx links ↗
+              </a>
+              {c?.id !== 5 && (
+                <button onClick={() => { setId(5); safe(() => sync(5)); }}>
+                  Load tested covenant #5
+                </button>
+              )}
+            </div>
+            <p className="evidence-footnote">
+              The 1 wei test escrow is held until expiry; the sponsor can recover it after the deadline.
+            </p>
+          </section>
+        )}
         {tab === "dossier" && (
           <section className="workspace">
             <aside className="rail">

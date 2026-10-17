@@ -67,4 +67,4 @@ Required live evidence is specified in [E2E_PLAN.md](verification/E2E_PLAN.md). 
 npm run dev
 ```
 
-The supplied logo is used in a repository-style merge dossier. The interface exposes contract address/network/Explorer, derives role actions from state and keeps creation separate from inspection. It does not copy AuditCover's marketplace board.
+The supplied logo is used in a repository-style merge dossier. The interface exposes contract address/network/Explorer, derives role actions from state and keeps creation separate from inspection. It opens on the current live replay-check covenant, links the finalized `MERGE_ALREADY_USED` transaction and evidence report, and re-reads contract state after a finalized rollback so the UI does not show stale state. It does not copy AuditCover's marketplace board.
