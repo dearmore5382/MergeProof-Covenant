@@ -30,6 +30,14 @@ export type Covenant = {
 };
 export const validAddress = (x: string) =>
   /^0x[0-9a-fA-F]{40}$/.test(x) && !/^0x0{40}$/.test(x);
+export const initialContractAddress = (
+  stored: string | null,
+  current: string,
+  superseded: string[],
+) =>
+  !stored || superseded.some((address) => address.toLowerCase() === stored.toLowerCase())
+    ? current
+    : stored;
 export const validTx = (x: string) => /^0x[0-9a-fA-F]{64}$/.test(x);
 export const normalizeTx = (x: unknown) => {
   if (typeof x === "string" && validTx(x)) return x;

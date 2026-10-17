@@ -4,6 +4,7 @@ import {
   normalizeTx,
   parseSafeGEN,
   execution,
+  initialContractAddress,
   nextAction,
   type Covenant,
 } from "./protocol";
@@ -16,6 +17,13 @@ describe("frontend authority", () => {
   it("validates identities", () => {
     expect(validAddress(c.sponsor)).toBe(true);
     expect(validAddress("0x0")).toBe(false);
+  });
+  it("migrates saved superseded deployments but retains custom addresses", () => {
+    const current = "0x" + "c".repeat(40);
+    const old = "0x" + "d".repeat(40);
+    expect(initialContractAddress(old, current, [old.toUpperCase().replace("0X", "0x")])).toBe(current);
+    expect(initialContractAddress("0x" + "e".repeat(40), current, [old])).toBe("0x" + "e".repeat(40));
+    expect(initialContractAddress(null, current, [old])).toBe(current);
   });
   it("normalizes SDK hashes", () => {
     const h = "0x" + "1".repeat(64);

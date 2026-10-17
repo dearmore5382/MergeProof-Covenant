@@ -7,6 +7,7 @@ import logo from "../logo.png";
 import {
   gen,
   execution,
+  initialContractAddress,
   nextAction,
   normalizeTx,
   parseSafeGEN,
@@ -27,11 +28,21 @@ const deployedAddress = import.meta.env.VITE_CONTRACT_ADDRESS || "0xC98759C893D0
 const replayEvidenceAddress = "0xC98759C893D0B515a4AB866aFA8a65C87E4ea648";
 const replayVerifyHash = "0xa0857156e5aba634e7ff7f534623abb919b85706c738fce876630259565f436d";
 const replayReportUrl = "https://github.com/dearmore5382/MergeProof-Covenant/blob/06d04db6aef0872e227a32025232f6ef415bd271/verification/E2E_STUDIONET_C98759.md#focused-live-duplicate-merge-retry";
+const supersededAddresses = [
+  "0xd689a42Ffffe5CD3A07f4bd0e938c7F221Dac024",
+  "0x7c5e173E75CC5464b7a9ED5129a40637268071FB",
+  "0xd75259b7499AFa4A7Ebe79D383916F10FA0c2622",
+  "0xa816CAe7E4c20ac44DE2d332b87775965076e533",
+];
 const short = (x: string) =>
   x ? `${x.slice(0, 6)}…${x.slice(-4)}` : "Not connected";
 export default function App() {
   const [address, setAddress] = useState(
-    localStorage.getItem("mergeproof-address") || deployedAddress,
+    () => initialContractAddress(
+      localStorage.getItem("mergeproof-address"),
+      deployedAddress,
+      supersededAddresses,
+    ),
   );
   const [wallet, setWallet] = useState("");
   const [id, setId] = useState(5);
